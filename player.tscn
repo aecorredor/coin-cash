@@ -74,6 +74,7 @@ size = Vector2(34, 47)
 [node name="Player" type="Area2D"]
 script = ExtResource("1_ne0bx")
 metadata/_edit_group_ = true
+metadata/_edit_vertical_guides_ = [-142.0]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
@@ -87,3 +88,5 @@ offset = Vector2(2.08165e-12, -5)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_t4f87")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
