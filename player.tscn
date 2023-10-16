@@ -76,11 +76,12 @@ script = ExtResource("1_ne0bx")
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_u3vre")
 animation = &"run"
 autoplay = "idle"
-frame_progress = 0.463631
+frame_progress = 0.62675
 offset = Vector2(2.08165e-12, -5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
