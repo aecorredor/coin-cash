@@ -22,5 +22,9 @@ public partial class player : Area2D
       X = Mathf.Clamp(Position.X, 0, screenSize.X),
       Y = Mathf.Clamp(Position.Y, 0, screenSize.Y)
     };
+
+    var animated2DSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+    animated2DSprite.Animation = velocity.Length() > 0 ? "run" : "idle";
+    animated2DSprite.FlipH = velocity.X != 0 && velocity.X < 0;
   }
 }
