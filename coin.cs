@@ -5,8 +5,13 @@ public partial class coin : Area2D
 {
   public Vector2 ScreenSize = Vector2.Zero;
 
-  private void PickUp()
+  private async void PickUp()
   {
+    GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
+    var tw = CreateTween().SetParallel().SetTrans(Tween.TransitionType.Quad);
+    tw.TweenProperty(this, "scale", Scale * 3, 0.3);
+    tw.TweenProperty(this, "modulate:a", 0.0, 0.3);
+    await ToSignal(tw, Tween.SignalName.Finished);
     QueueFree();
   }
 
