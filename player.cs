@@ -41,7 +41,7 @@ public partial class player : Area2D
     GetNode<AnimatedSprite2D>("AnimatedSprite2D").Animation = "idle";
   }
 
-  private void Die()
+  public void Die()
   {
     GetNode<AnimatedSprite2D>("AnimatedSprite2D").Animation = "hurt";
     SetProcess(false);
@@ -52,6 +52,7 @@ public partial class player : Area2D
     if (area.IsInGroup("coins") && area.HasMethod("PickUp"))
     {
       area.Call("PickUp");
+      EmitSignal(SignalName.PickUp);
     }
     else if (area.IsInGroup("obstacles"))
     {

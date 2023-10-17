@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class main : Node2D
 {
@@ -24,7 +25,6 @@ public partial class main : Node2D
     Player = GetNode<player>("Player");
     Player.ScreenSize = ScreenSize;
     Player.Hide();
-    NewGame();
   }
 
   public void NewGame()
@@ -37,6 +37,8 @@ public partial class main : Node2D
     Player.Show();
     GetNode<Timer>("GameTimer").Start();
     SpawnCoins();
+    GetNode<HUD>("HUD").UpdateScore(Score);
+    GetNode<HUD>("HUD").UpdateTimer(TimeLeft);
   }
 
   void SpawnCoins()
@@ -53,6 +55,49 @@ public partial class main : Node2D
     }
   }
 
+  public void GameOver()
+  {
+    isPlaying = false;
+    GetNode<Timer>("GameTimer").Stop();
+    GetTree().CallGroup("coins", "queue_free");
+    GetNode<HUD>("HUD").ShowGameOver();
+    Player.Die();
+  }
+
   // Called every frame. 'delta' is the elapsed time since the previous frame.
-  public override void _Process(double delta) { }
+  public override void _Process(double delta)
+  {
+    if (isPlaying && GetTree().GetNodesInGroup("coins").Count() == 0)
+    {
+      Level += 1;
+      TimeLeft += 5;
+      SpawnCoins();
+    }
+  }
+
+  private void _on_game_timer_timeout()
+  {
+    TimeLeft -= 1;
+    GetNode<HUD>("HUD").UpdateTimer(TimeLeft);
+    if (TimeLeft <= 0)
+    {
+      GameOver();
+    }
+  }
+
+  private void _on_player_hurt()
+  {
+    GameOver();
+  }
+
+  private void _on_player_pick_up()
+  {
+    Score += 1;
+    GetNode<HUD>("HUD").UpdateScore(Score);
+  }
+
+  private void _on_hud_start_game()
+  {
+    NewGame();
+  }
 }
