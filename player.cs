@@ -52,12 +52,17 @@ public partial class player : Area2D
     if (area.IsInGroup("coins") && area.HasMethod("PickUp"))
     {
       area.Call("PickUp");
-      EmitSignal(SignalName.PickUp);
+      EmitSignal(SignalName.PickUp, "coin");
     }
     else if (area.IsInGroup("obstacles"))
     {
       EmitSignal(SignalName.Hurt);
       Die();
+    }
+    else if (area.IsInGroup("powerups") && area.HasMethod("PickUp"))
+    {
+      area.Call("PickUp");
+      EmitSignal(SignalName.PickUp, "powerup");
     }
   }
 }

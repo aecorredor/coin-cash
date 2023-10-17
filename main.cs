@@ -10,6 +10,9 @@ public partial class main : Node2D
   PackedScene CoinScene;
 
   [Export]
+  PackedScene PowerupScene;
+
+  [Export]
   int playTime = 30;
 
   int Level = 1;
@@ -74,6 +77,9 @@ public partial class main : Node2D
       Level += 1;
       TimeLeft += 5;
       SpawnCoins();
+      var powerupTimer = GetNode<Timer>("PowerupTimer");
+      powerupTimer.WaitTime = GD.RandRange(5, 10);
+      powerupTimer.Start();
     }
   }
 
@@ -92,15 +98,37 @@ public partial class main : Node2D
     GameOver();
   }
 
-  private void _on_player_pick_up()
+  private void _on_player_pick_up(string type)
   {
-    Score += 1;
-    GetNode<HUD>("HUD").UpdateScore(Score);
-    GetNode<AudioStreamPlayer>("CoinSound").Play();
+    switch (type)
+    {
+      case "coin":
+        GetNode<AudioStreamPlayer>("CoinSound").Play();
+        Score += 1;
+        GetNode<HUD>("HUD").UpdateScore(Score);
+        break;
+
+      case "powerup":
+        GetNode<AudioStreamPlayer>("PowerupSound").Play();
+        TimeLeft += 5;
+        GetNode<HUD>("HUD").UpdateTimer(TimeLeft);
+        break;
+    }
   }
 
   private void _on_hud_start_game()
   {
     NewGame();
+  }
+
+  private void _on_powerup_timer_timeout()
+  {
+    var pu = PowerupScene.Instantiate() as powerup;
+    AddChild(pu);
+    pu.ScreenSize = ScreenSize;
+    pu.Position = new Vector2(
+      (float)GD.RandRange(0, ScreenSize.X),
+      (float)GD.RandRange(0, ScreenSize.Y)
+    );
   }
 }
