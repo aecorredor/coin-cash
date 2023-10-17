@@ -5,9 +5,9 @@ using System.Diagnostics;
 public partial class player : Area2D
 {
   [Export]
-  private int Speed = 350;
-  private Vector2 velocity = Vector2.Zero;
-  private Vector2 screenSize = new Vector2(480, 720);
+  int Speed = 350;
+  Vector2 Velocity = Vector2.Zero;
+  public Vector2 ScreenSize = new Vector2(480, 720);
 
   [Signal]
   public delegate void PickUpEventHandler();
@@ -21,42 +21,42 @@ public partial class player : Area2D
   // Called every frame. 'delta' is the elapsed time since the previous frame.
   public override void _Process(double delta)
   {
-	velocity = Input.GetVector("left", "right", "up", "down");
-	Position += velocity * Speed * (float)delta;
-	Position = Position with
-	{
-	  X = Mathf.Clamp(Position.X, 0, screenSize.X),
-	  Y = Mathf.Clamp(Position.Y, 0, screenSize.Y)
-	};
+    Velocity = Input.GetVector("left", "right", "up", "down");
+    Position += Velocity * Speed * (float)delta;
+    Position = Position with
+    {
+      X = Mathf.Clamp(Position.X, 0, ScreenSize.X),
+      Y = Mathf.Clamp(Position.Y, 0, ScreenSize.Y)
+    };
 
-	var animated2DSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-	animated2DSprite.Animation = velocity.Length() > 0 ? "run" : "idle";
-	animated2DSprite.FlipH = velocity.X != 0 && velocity.X < 0;
+    var animated2DSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+    animated2DSprite.Animation = Velocity.Length() > 0 ? "run" : "idle";
+    animated2DSprite.FlipH = Velocity.X != 0 && Velocity.X < 0;
   }
 
-  private void start()
+  public void Start()
   {
-	SetProcess(true);
-	Position = screenSize / 2;
-	GetNode<AnimatedSprite2D>("AnimatedSprite2D").Animation = "idle";
+    SetProcess(true);
+    Position = ScreenSize / 2;
+    GetNode<AnimatedSprite2D>("AnimatedSprite2D").Animation = "idle";
   }
 
-  private void die()
+  private void Die()
   {
-	GetNode<AnimatedSprite2D>("AnimatedSprite2D").Animation = "hurt";
-	SetProcess(false);
+    GetNode<AnimatedSprite2D>("AnimatedSprite2D").Animation = "hurt";
+    SetProcess(false);
   }
 
   private void _on_area_entered(Area2D area)
   {
-	if (area.IsInGroup("coins"))
-	{
-	  EmitSignal(SignalName.PickUp);
-	}
-	else if (area.IsInGroup("obstacles"))
-	{
-	  EmitSignal(SignalName.Hurt);
-	  die();
-	}
+    if (area.IsInGroup("coins") && area.HasMethod("PickUp"))
+    {
+      area.Call("PickUp");
+    }
+    else if (area.IsInGroup("obstacles"))
+    {
+      EmitSignal(SignalName.Hurt);
+      Die();
+    }
   }
 }

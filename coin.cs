@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public partial class coin : Node2D
+public partial class coin : Area2D
 {
-  private Vector2 screenSize = Vector2.Zero;
+  public Vector2 ScreenSize = Vector2.Zero;
 
   private void PickUp()
   {

@@ -57,7 +57,7 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_bpvuf"]
 radius = 18.0
 
-[node name="Coin" type="Node2D" groups=["coins"]]
+[node name="Coin" type="Area2D" groups=["coins"]]
 script = ExtResource("1_blstj")
 metadata/_edit_group_ = true
 
