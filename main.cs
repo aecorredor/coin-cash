@@ -53,6 +53,7 @@ public partial class main : Node2D
         (float)GD.RandRange(0, ScreenSize.Y)
       );
     }
+    GetNode<AudioStreamPlayer>("LevelSound").Play();
   }
 
   public void GameOver()
@@ -62,6 +63,7 @@ public partial class main : Node2D
     GetTree().CallGroup("coins", "queue_free");
     GetNode<HUD>("HUD").ShowGameOver();
     Player.Die();
+    GetNode<AudioStreamPlayer>("EndSound").Play();
   }
 
   // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -94,6 +96,7 @@ public partial class main : Node2D
   {
     Score += 1;
     GetNode<HUD>("HUD").UpdateScore(Score);
+    GetNode<AudioStreamPlayer>("CoinSound").Play();
   }
 
   private void _on_hud_start_game()
