@@ -49,7 +49,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("11_slbjm")
 }],
-"loop": true,
+"loop": false,
 "name": &"shine",
 "speed": 12.0
 }]
@@ -66,7 +66,12 @@ scale = Vector2(0.4, 0.4)
 sprite_frames = SubResource("SpriteFrames_n01qx")
 animation = &"shine"
 autoplay = "shine"
-frame_progress = 0.241886
+frame = 10
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_bpvuf")
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
